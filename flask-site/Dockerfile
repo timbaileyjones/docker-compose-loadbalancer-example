@@ -1,7 +1,7 @@
 #FROM python:3-onbuild
 FROM ubuntu:latest
 RUN apt-get update \
-    && apt-get install -y python python-pip 
+    && apt-get install -y python python-pip iputils-ping
 COPY . /app
 RUN cd /app \
     && pip install --upgrade pip \
