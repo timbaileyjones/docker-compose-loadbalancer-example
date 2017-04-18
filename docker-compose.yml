@@ -1,0 +1,50 @@
+version: '3'
+# docker-compose file
+# 4 containers
+#   2 of them to talk to each other - segregated by net - site1.com
+#   2 of them to talk to each other - segregated by net - site2.com
+# all four share a common volume
+# 
+# to be running an endpoint to send a message via http,
+# and write the payload to the shared volume.
+# 
+# Use any language I want.
+# no authentication
+
+#bonus: with a load balancer in front
+#  nginx, http_proxy, 
+# 
+
+services:
+    load-balancer:
+      image: nginx
+      volumes:
+        - ./nginx.conf:/etc/nginx/nginx.conf
+        - /tmp/shared_logs:/tmp/shared_logs
+      links:
+        - flask-site:flask-site
+      ports:
+        - 8000:80
+          #- node-site:node-site
+
+    flask-site:
+       build: ./flask-site
+       volumes:
+         - /tmp/shared_logs:/tmp/shared_logs
+       ports:
+         - 8080:8080
+           #networks:
+           #- flask_network
+           #depends_on:
+           #- load-balancer
+           #
+    node-site:
+       build: ./node-site
+       volumes:
+         - /tmp/shared_logs:/tmp/shared_logs
+       ports:
+         - 3000:3000
+           #networks:
+           #- nodenetwork
+           #depends_on:
+           #- load-balancer
