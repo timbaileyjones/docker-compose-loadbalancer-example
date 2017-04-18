@@ -22,13 +22,13 @@
                     data: textarea[0].value
                 };
                 console.log("payload", payload);
-                $.ajax({
+                $.ajax('/api/data', {
                     type: "POST",
-                    url: '/api/data',
-                    data: payload,
+                    data: JSON.stringify(payload),
                     contentType: "application/json",
                     complete: function(response) {
                         console.log("response", response);
+                        textarea[0].value = '';
                     }
                 });
             });
