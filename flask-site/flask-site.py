@@ -16,7 +16,7 @@ def root():
 @app.route('/api/data', methods = ['POST'])
 def postData():
     payload = str(request.data)
-    logfile = open('/tmp/shared_logs/%s_access.log' % hostname, 'a');
+    logfile = open('/tmp/shared_logs/%s_access.flask.log' % hostname, 'a');
     logfile.write('%s accepted input: %s\n' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), payload))
     logfile.close()
     return "{'status': 'success'}"
