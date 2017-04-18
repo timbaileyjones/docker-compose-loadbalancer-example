@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 # docker-compose file
 # 4 containers
 #   2 of them to talk to each other - segregated by net - site1.com
