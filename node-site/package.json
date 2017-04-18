@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "start": "nodemon --watch 'server/**/*.ts' --exec ts-node server/node-server.ts"
+    "start": "nodemon --watch 'server/*.js' server/node-server.js"
   },
   "private": true,
   "dependencies": {
