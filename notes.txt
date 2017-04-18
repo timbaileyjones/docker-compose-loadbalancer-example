@@ -1,0 +1,74 @@
+DOCKER COMMANDS
+
+docker ps    # all running containers
+docker ps -a    # all containers that HAVE run
+docker ps -l    # show LAST container that was running
+docker images          # show all top-level layers
+docker images --tree   # show all layers
+docker history short-image-name # s0how how layer layers were created
+docker commit image-id short-image-name
+docker save -o /tmp/whatever.tar  image-id
+docker load -i /tmp/whatever.tar 
+docker top image-id   # see processes inside container
+docker run -it image-id "command with args"   # run interactive
+docker run -d  image-id "command with args"   # run detached (background)
+docker attach image-id (attach to a detached container)
+docker run --cpu-shares <0-1023> 
+docker run --memory=1g' 
+read the entire man page for 'docker run'
+
+Control-P+ Control-Q - to detach without exiting
+docker start image-id   # start
+docker restart image-id   # restart
+docker stop image-id   # stop an image with SIGTERM
+docker kill image-id   # stop an image with SIGKILL
+docker kill -s <SIGNAL> image-id   # send any signal to PID1 inside container
+docker info # shows number of containers/images, plus configuration
+docker rm image-id   # remove container
+docker rmi image-id   # remove image
+docker rm -f image-id   # remove (with force)
+docker logs # see messages from container
+docker logs -f # continually see messages from container (like tail -f)
+
+
+
+docker inspect image-id 
+nsenter <PID-on-host>  # (enter namespace)
+nsenter -m -u -n -p -i -t  <PID-on-host>  "command with args"
+   namespaces are m=mount u=uts n=network p=process i=pic
+   -t is 'target' (i.e. the PID-on-host
+
+docker-enter image-id   #  easier form of nsenter, above?
+docker exec -it image "command"  # execute a command inside container
+docker run -v /some/host/dir:/dir/inside-container  (mount /some/local/dir inside container)
+docker run -p <inside-port>:<outside-port>
+docker run -P # map all ports declared with EXPOSE instruction from Dockerfile
+
+docker build -t image-name:version . # creates an image following directions in Dockerfile
+docker tag image-id username/image-name
+docker push [hostname:port/]username/image-name
+
+
+DOCKERFILE instructions
+FROM
+MAINTAINER
+RUN
+EXPOSE <port-number>    # expose internal port number to outside
+CMD  # has shell form, and exec form (json-array of commands)
+ENTRYPOINT   # specifies a command, but arguments to 'docker run' get appended to the command here as arguments  (use to differentiate the two groups of webservers)
+   ENTRYPOINT cannot be overridden by 'docker run -it "argument"'
+       (but can be overridden by 'docker run --entrypoint')
+ENV name=value,[name2=value2...]  # define environment variables
+
+docker run --volumes-from=<some-other-container-name>  # volume sharing
+
+docker run --name=some-hostname  # how to connect containers to each other by name?
+docker run --dns=8.8.8.8  # use google dns instead of local /etc/resolv.conf
+
+docker port image-id   # (shows network port mappings)
+
+
+LINKING CONTAINERS to each other (but not the outside world)
+  --link=<src-image-id>:<alias-name>
+The IP address information for <alias-name> gets put in the container's environment as ALIAS_NAME_PORT_*_TCP_* variables.
+
